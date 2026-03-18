@@ -43,17 +43,22 @@ export default function Navbar() {
     setActiveDropdown(null);
   }, [location]);
 
+  // Always dark background on mobile so hamburger is visible
+  const isMobileDark = !scrolled && !mobileOpen;
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? "bg-white shadow-lg py-2" : "bg-transparent py-4"
-    }`}>
+      scrolled || mobileOpen ? "bg-white shadow-lg py-2" : "py-4"
+    }`}
+    style={{ background: scrolled || mobileOpen ? "white" : "rgba(10,22,40,0.95)" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
 
           {/* Logo */}
           <Link to="/" className="flex flex-col">
-            <span className="text-xl font-bold font-display leading-tight"
-              style={{ color: scrolled ? "#0a1628" : "white" }}>
+            <span className="text-lg sm:text-xl font-bold font-display leading-tight"
+              style={{ color: scrolled || mobileOpen ? "#0a1628" : "white" }}>
               JS Reddy & Associates
             </span>
             <span className="text-xs font-body tracking-widest uppercase"
@@ -92,15 +97,19 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Hamburger */}
-          <button className="lg:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)}>
+          {/* Hamburger — always visible */}
+          <button
+            className="lg:hidden p-2 rounded-lg"
+            style={{ background: "rgba(201,168,76,0.15)" }}
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
             <div className="w-6 flex flex-col gap-1.5">
               <span className={`block h-0.5 transition-all duration-300 ${
-                mobileOpen ? "rotate-45 translate-y-2 bg-gray-800" : scrolled ? "bg-gray-800" : "bg-white"}`} />
+                mobileOpen ? "rotate-45 translate-y-2" : ""} bg-yellow-400`} />
               <span className={`block h-0.5 transition-all duration-300 ${
-                mobileOpen ? "opacity-0" : scrolled ? "bg-gray-800" : "bg-white"}`} />
+                mobileOpen ? "opacity-0" : ""} bg-yellow-400`} />
               <span className={`block h-0.5 transition-all duration-300 ${
-                mobileOpen ? "-rotate-45 -translate-y-2 bg-gray-800" : scrolled ? "bg-gray-800" : "bg-white"}`} />
+                mobileOpen ? "-rotate-45 -translate-y-2" : ""} bg-yellow-400`} />
             </div>
           </button>
         </div>
@@ -108,7 +117,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="lg:hidden bg-white shadow-xl mobile-menu-open">
+        <div className="lg:hidden bg-white shadow-xl mobile-menu-open border-t border-gray-100">
           <div className="px-4 py-4 space-y-1">
             {navLinks.map((link) => (
               <div key={link.label}>
@@ -117,10 +126,10 @@ export default function Navbar() {
                   {link.label}
                 </Link>
                 {link.dropdown && (
-                  <div className="pl-6 space-y-1">
+                  <div className="pl-4 space-y-1">
                     {link.dropdown.map((item) => (
                       <Link key={item.label} to={item.path}
-                        className="block px-4 py-2 text-sm text-gray-600 hover:text-yellow-700 font-body transition-colors">
+                        className="block px-4 py-2 text-sm text-gray-500 hover:text-yellow-700 font-body transition-colors">
                         — {item.label}
                       </Link>
                     ))}
