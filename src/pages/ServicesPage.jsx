@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const allServices = [
@@ -136,68 +136,98 @@ export default function ServicesPage() {
   const [active, setActive] = useState("direct-tax");
   const selected = allServices.find((s) => s.id === active);
 
+  useEffect(() => {
+    const handleSelect = (e) => {
+      if (e.detail) {
+        setActive(e.detail);
+        setTimeout(() => {
+          const el = document.getElementById("service-content");
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+    };
+    window.addEventListener("selectService", handleSelect);
+    return () => window.removeEventListener("selectService", handleSelect);
+  }, []);
+
   return (
-    <div className="pt-20">
+    <div className="pt-16">
 
       {/* Hero */}
       <section
-        className="py-16 sm:py-20 text-white"
+        className="py-14 sm:py-20 text-white"
         style={{ background: "linear-gradient(135deg, #0a1628, #112240)" }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-yellow-400 font-body text-sm tracking-widest uppercase font-semibold mb-4">
+          <p className="text-yellow-400 font-body text-sm tracking-widest uppercase font-semibold mb-3">
             Our Services
           </p>
           <h1
             className="font-display font-bold mb-4 leading-tight"
-            style={{ fontSize: "clamp(1.8rem, 5vw, 3.2rem)" }}
+            style={{ fontSize: "clamp(1.6rem, 4.5vw, 3rem)" }}
           >
             Comprehensive Financial
             <br className="hidden sm:block" />
             <span className="gold-text"> & Legal Services</span>
           </h1>
-          <p className="text-gray-300 font-body text-base sm:text-lg max-w-2xl leading-relaxed">
+          <p className="text-gray-300 font-body text-sm sm:text-base max-w-2xl leading-relaxed">
             From tax planning and audits to corporate laws and international
             taxation — we offer a full suite of CA services under one roof.
           </p>
         </div>
       </section>
 
-      {/* Mobile scrollable tabs */}
-      <section className="lg:hidden py-4 bg-white border-b border-gray-100 sticky top-16 z-30">
-        <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2 px-4" style={{ width: "max-content" }}>
+      {/* Mobile scrollable tabs — no sticky, no white gap */}
+      <div
+        className="lg:hidden py-3 border-b border-gray-200"
+        style={{ background: "#f9fafb" }}
+      >
+        <div
+          className="overflow-x-auto"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          <div className="flex gap-2 px-4 pb-1" style={{ width: "max-content" }}>
             {allServices.map((s) => (
               <button
                 key={s.id}
-                onClick={() => setActive(s.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-body font-medium whitespace-nowrap transition-all border ${
-                  active === s.id
-                    ? "border-yellow-500 text-yellow-800"
-                    : "bg-gray-50 border-gray-200 text-gray-600"
-                }`}
+                onClick={() => {
+                  setActive(s.id);
+                  setTimeout(() => {
+                    const el = document.getElementById("service-content");
+                    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }, 50);
+                }}
+                className="flex items-center gap-2 px-3 py-2 rounded-full text-xs font-body font-medium whitespace-nowrap transition-all border"
                 style={
                   active === s.id
-                    ? { background: "linear-gradient(135deg, #c9a84c, #e8c97a)" }
-                    : {}
+                    ? {
+                        background: "linear-gradient(135deg, #c9a84c, #e8c97a)",
+                        borderColor: "#c9a84c",
+                        color: "#0a1628",
+                      }
+                    : {
+                        background: "white",
+                        borderColor: "#e5e7eb",
+                        color: "#6b7280",
+                      }
                 }
               >
-                <span>{s.icon}</span>
+                <span style={{ fontSize: "14px" }}>{s.icon}</span>
                 <span>{s.title}</span>
               </button>
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Main layout */}
-      <section className="py-10 sm:py-16 bg-gray-50">
+      <section className="py-8 sm:py-14 bg-gray-50" id="service-content">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-8">
 
             {/* Sidebar desktop */}
             <div className="hidden lg:block lg:col-span-1">
-              <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm sticky top-24">
+              <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm sticky top-20">
                 {allServices.map((s) => (
                   <button
                     key={s.id}
@@ -222,13 +252,12 @@ export default function ServicesPage() {
               </div>
             </div>
 
-            {/* Content panel */}
+            {/* Content */}
             <div className="lg:col-span-2">
               {selected && (
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 sm:p-8">
-                  {/* Header */}
-                  <div className="flex items-start sm:items-center gap-4 mb-6">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 rounded-xl bg-yellow-50 border border-yellow-200 flex items-center justify-center text-xl sm:text-2xl">
+                <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 sm:p-8">
+                  <div className="flex items-start gap-4 mb-5">
+                    <div className="w-12 h-12 flex-shrink-0 rounded-xl bg-yellow-50 border border-yellow-200 flex items-center justify-center text-xl">
                       {selected.icon}
                     </div>
                     <div>
@@ -241,20 +270,17 @@ export default function ServicesPage() {
                     </div>
                   </div>
 
-                  <div className="section-divider mb-6" />
+                  <div className="section-divider mb-5" />
 
-                  <h3 className="font-display font-semibold text-gray-900 text-lg mb-4">
+                  <h3 className="font-display font-semibold text-gray-900 text-base sm:text-lg mb-4">
                     What's Included:
                   </h3>
-
                   <ul className="space-y-3">
                     {selected.items.map((item) => (
                       <li key={item} className="flex items-start gap-3">
                         <span
                           className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-white text-xs"
-                          style={{
-                            background: "linear-gradient(135deg, #c9a84c, #e8c97a)",
-                          }}
+                          style={{ background: "linear-gradient(135deg, #c9a84c, #e8c97a)" }}
                         >
                           ✓
                         </span>
@@ -265,11 +291,11 @@ export default function ServicesPage() {
                     ))}
                   </ul>
 
-                  <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row gap-3">
-                    <Link to="/contact" className="btn-primary text-center">
+                  <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col sm:flex-row gap-3">
+                    <Link to="/contact" className="btn-primary text-center text-sm">
                       Enquire About This Service →
                     </Link>
-                    <Link to="/contact" className="btn-outline text-center">
+                    <Link to="/contact" className="btn-outline text-center text-sm">
                       Request a Quote
                     </Link>
                   </div>
@@ -281,30 +307,25 @@ export default function ServicesPage() {
       </section>
 
       {/* Why choose us */}
-      <section className="py-14 bg-white">
+      <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h2 className="font-display text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
               Why Clients Choose Us
             </h2>
             <div className="section-divider mx-auto" />
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { icon: "🏅", title: "ICAI Certified", desc: "Registered firm with qualified FCAs" },
               { icon: "⏱️", title: "Deadline Focused", desc: "Never miss a compliance date" },
               { icon: "💰", title: "Cost Effective", desc: "Premium services at fair pricing" },
               { icon: "🔐", title: "Data Security", desc: "Your information is always safe" },
             ].map((f) => (
-              <div
-                key={f.title}
-                className="p-4 sm:p-6 rounded-xl bg-gray-50 border border-gray-100 card-lift text-center"
-              >
-                <div className="text-3xl sm:text-4xl mb-3">{f.icon}</div>
-                <h3 className="font-display font-semibold text-gray-900 text-sm sm:text-base mb-1 sm:mb-2">
-                  {f.title}
-                </h3>
-                <p className="text-gray-500 text-xs sm:text-sm font-body">{f.desc}</p>
+              <div key={f.title} className="p-4 rounded-xl bg-gray-50 border border-gray-100 card-lift text-center">
+                <div className="text-3xl mb-2">{f.icon}</div>
+                <h3 className="font-display font-semibold text-gray-900 text-sm mb-1">{f.title}</h3>
+                <p className="text-gray-500 text-xs font-body">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -313,15 +334,15 @@ export default function ServicesPage() {
 
       {/* CTA */}
       <section
-        className="py-14"
+        className="py-12"
         style={{ background: "linear-gradient(135deg, #0a1628, #1a3a5c)" }}
       >
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mb-4">
             Need a Specific Service?
           </h2>
-          <p className="text-gray-300 font-body mb-8 text-sm sm:text-base">
-            Contact our team and we'll guide you to the right solution for your situation.
+          <p className="text-gray-300 font-body mb-6 text-sm sm:text-base">
+            Contact our team and we'll guide you to the right solution.
           </p>
           <Link to="/contact" className="btn-primary inline-block">
             Talk to Our Experts →

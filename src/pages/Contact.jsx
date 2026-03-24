@@ -29,18 +29,26 @@ export default function Contact() {
   };
 
   return (
-    <div className="pt-20">
+    <div style={{ marginTop: "-1px" }}>
 
       {/* Hero */}
-      <section className="py-20 text-white"
-        style={{ background: "linear-gradient(135deg, #0a1628, #112240)" }}>
+      <section
+        className="py-20 text-white"
+        style={{ background: "linear-gradient(135deg, #0a1628, #112240)", paddingTop: "100px" }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-yellow-400 font-body text-sm tracking-widest uppercase font-semibold mb-4">Contact Us</p>
-          <h1 className="font-display text-5xl font-bold mb-4">
+          <p className="text-yellow-400 font-body text-sm tracking-widest uppercase font-semibold mb-4">
+            Contact Us
+          </p>
+          <h1
+            className="font-display font-bold mb-4 text-white"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+          >
             Let's Start a <span className="gold-text">Conversation</span>
           </h1>
           <p className="text-gray-300 font-body text-lg max-w-2xl">
-            Reach out for expert guidance on taxation, audit, corporate laws or any financial advisory matter. We respond within 24 hours.
+            Reach out for expert guidance on taxation, audit, corporate laws or
+            any financial advisory matter. We respond within 24 hours.
           </p>
         </div>
       </section>
@@ -68,8 +76,6 @@ export default function Contact() {
                   </div>
                 </div>
               ))}
-
-              {/* Map placeholder */}
               <div className="rounded-xl overflow-hidden border border-gray-100 h-48 flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50">
                 <div className="text-center">
                   <div className="text-4xl mb-2">📍</div>
@@ -84,12 +90,15 @@ export default function Contact() {
 
             {/* Form */}
             <div className="lg:col-span-2 bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-              <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
-
+              <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">
+                Send Us a Message
+              </h2>
               {submitted ? (
                 <div className="text-center py-16">
                   <div className="text-6xl mb-4">✅</div>
-                  <h3 className="font-display text-2xl font-semibold text-green-700 mb-2">Message Received!</h3>
+                  <h3 className="font-display text-2xl font-semibold text-green-700 mb-2">
+                    Message Received!
+                  </h3>
                   <p className="text-gray-500 font-body mb-6">
                     Thank you for reaching out. Our team will get back to you within 24 business hours.
                   </p>
@@ -119,13 +128,12 @@ export default function Contact() {
                         placeholder="+91 XXXXX XXXXX" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 font-body mb-1">Company / Organization</label>
+                      <label className="block text-sm font-medium text-gray-700 font-body mb-1">Company</label>
                       <input type="text" name="company" value={form.company} onChange={handleChange}
                         className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-body text-sm transition"
                         placeholder="Your company name" />
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 font-body mb-1">Service Required</label>
                     <select name="service" value={form.service} onChange={handleChange}
@@ -142,19 +150,17 @@ export default function Contact() {
                       <option>Other</option>
                     </select>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 font-body mb-1">Your Message *</label>
                     <textarea name="message" rows={5} required value={form.message} onChange={handleChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 font-body text-sm transition resize-none"
-                      placeholder="Please describe your requirement in brief..." />
+                      placeholder="Please describe your requirement..." />
                   </div>
-
                   <button type="submit" className="btn-primary w-full text-center">
                     Send Message →
                   </button>
                   <p className="text-gray-400 text-xs font-body text-center">
-                    We respond within 24 business hours. All information is kept strictly confidential.
+                    We respond within 24 hours. All information is kept strictly confidential.
                   </p>
                 </form>
               )}
@@ -168,15 +174,21 @@ export default function Contact() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-yellow-700 font-body font-semibold text-sm tracking-widest uppercase mb-3">FAQs</p>
-            <h2 className="font-display text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+            <h2 className="font-display text-4xl font-bold text-gray-900 mb-4">
+              Frequently Asked Questions
+            </h2>
             <div className="section-divider mx-auto" />
           </div>
           <div className="space-y-3">
             {faqs.map((faq, i) => (
               <div key={i} className="border border-gray-100 rounded-xl overflow-hidden bg-white shadow-sm">
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between px-6 py-5 text-left">
-                  <span className="font-display font-semibold text-gray-900 text-base pr-4">{faq.q}</span>
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between px-6 py-5 text-left"
+                >
+                  <span className="font-display font-semibold text-gray-900 text-base pr-4">
+                    {faq.q}
+                  </span>
                   <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all text-sm font-bold ${
                     openFaq === i ? "bg-yellow-500 text-white rotate-45" : "bg-gray-100 text-gray-500"
                   }`}>
@@ -195,14 +207,19 @@ export default function Contact() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16" style={{ background: "linear-gradient(135deg, #0a1628, #1a3a5c)" }}>
+      <section
+        className="py-16"
+        style={{ background: "linear-gradient(135deg, #0a1628, #1a3a5c)" }}
+      >
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-display font-bold text-white mb-4">Ready to Get Started?</h2>
+          <h2 className="text-3xl font-display font-bold text-white mb-4">
+            Ready to Get Started?
+          </h2>
           <p className="text-gray-300 font-body mb-8">
-            Book a free 30-minute consultation with one of our expert CAs. No obligation.
+            Book a free 30-minute consultation with one of our expert CAs.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="tel:+91 7842243722" className="btn-primary">📞 Call Us Now</a>
+            <a href="tel:+919876543210" className="btn-primary">📞 Call Us Now</a>
             <a href="mailto:info@jsreddyandassociates.com" className="btn-outline">✉️ Email Us</a>
           </div>
         </div>

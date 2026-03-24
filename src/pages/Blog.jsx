@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 const categories = ["All", "Direct Tax", "GST", "Corporate Laws", "Audit", "FEMA", "Compliance"];
 
@@ -48,32 +47,44 @@ export default function Blog() {
 
   const filtered = posts.filter((p) => {
     const matchCat = activeCategory === "All" || p.category === activeCategory;
-    const matchSearch = p.title.toLowerCase().includes(search.toLowerCase()) ||
+    const matchSearch =
+      p.title.toLowerCase().includes(search.toLowerCase()) ||
       p.desc.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
   });
 
   return (
-    <div className="pt-20">
+    <div style={{ marginTop: "-1px" }}>
 
       {/* Hero */}
-      <section className="py-20 text-white"
-        style={{ background: "linear-gradient(135deg, #0a1628, #112240)" }}>
+      <section
+        className="py-20 text-white"
+        style={{ background: "linear-gradient(135deg, #0a1628, #112240)", paddingTop: "100px" }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-yellow-400 font-body text-sm tracking-widest uppercase font-semibold mb-4">Knowledge Hub</p>
-          <h1 className="font-display text-5xl font-bold mb-4">
+          <p className="text-yellow-400 font-body text-sm tracking-widest uppercase font-semibold mb-4">
+            Knowledge Hub
+          </p>
+          <h1
+            className="font-display font-bold mb-4 text-white"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+          >
             Articles & <span className="gold-text">Tax Updates</span>
           </h1>
           <p className="text-gray-300 font-body text-lg max-w-2xl">
-            Stay informed with our expert articles on income tax, GST, corporate laws, FEMA and compliance best practices.
+            Stay informed with our expert articles on income tax, GST, corporate
+            laws, FEMA and compliance best practices.
           </p>
-          {/* Search */}
           <div className="mt-8 max-w-lg">
             <div className="flex items-center gap-3 bg-white/10 border border-white/20 rounded-xl px-4 py-3">
               <span className="text-gray-400">🔍</span>
-              <input type="text" placeholder="Search articles..."
-                value={search} onChange={(e) => setSearch(e.target.value)}
-                className="flex-1 bg-transparent text-white placeholder-gray-400 font-body text-sm focus:outline-none" />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="flex-1 bg-transparent text-white placeholder-gray-400 font-body text-sm focus:outline-none"
+              />
             </div>
           </div>
         </div>
@@ -82,15 +93,17 @@ export default function Blog() {
       {/* Posts */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Category filters */}
           <div className="flex flex-wrap gap-2 mb-10">
             {categories.map((cat) => (
-              <button key={cat} onClick={() => setActiveCategory(cat)}
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${
                   activeCategory === cat
                     ? "bg-yellow-500 text-white shadow-md"
                     : "bg-white border border-gray-200 text-gray-600 hover:border-yellow-400 hover:text-yellow-700"
-                }`}>
+                }`}
+              >
                 {cat}
               </button>
             ))}
@@ -103,10 +116,23 @@ export default function Blog() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
               {filtered.map((post, i) => (
-                <div key={i} className="card-lift group rounded-xl overflow-hidden bg-white border border-gray-100">
-                  <div className="h-36 flex items-end p-5"
-                    style={{ background: `linear-gradient(135deg, #0a1628, #${["1a2f4e","1e3a5f","162b45","0d2035"][i % 4]})` }}>
-                    <span className={`px-3 py-1 rounded-full text-xs font-body font-semibold ${tagColors[post.category] || "bg-yellow-100 text-yellow-800"}`}>
+                <div
+                  key={i}
+                  className="card-lift group rounded-xl overflow-hidden bg-white border border-gray-100"
+                >
+                  <div
+                    className="h-36 flex items-end p-5"
+                    style={{
+                      background: `linear-gradient(135deg, #0a1628, #${
+                        ["1a2f4e","1e3a5f","162b45","0d2035"][i % 4]
+                      })`,
+                    }}
+                  >
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-body font-semibold ${
+                        tagColors[post.category] || "bg-yellow-100 text-yellow-800"
+                      }`}
+                    >
                       {post.category}
                     </span>
                   </div>
@@ -118,7 +144,7 @@ export default function Blog() {
                     <h3 className="font-display font-semibold text-gray-900 text-lg leading-snug mb-3 group-hover:text-yellow-800 transition-colors">
                       {post.title}
                     </h3>
-                    <p className="text-gray-500 text-sm font-body leading-relaxed mb-4 line-clamp-3">
+                    <p className="text-gray-500 text-sm font-body leading-relaxed mb-4">
                       {post.desc}
                     </p>
                     <button className="text-yellow-700 text-sm font-semibold font-body hover:text-yellow-900 transition-colors">
@@ -133,15 +159,24 @@ export default function Blog() {
       </section>
 
       {/* Newsletter */}
-      <section className="py-16" style={{ background: "linear-gradient(135deg, #0a1628, #1a3a5c)" }}>
+      <section
+        className="py-16"
+        style={{ background: "linear-gradient(135deg, #0a1628, #1a3a5c)" }}
+      >
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-display font-bold text-white mb-3">Never Miss a Tax Update</h2>
+          <h2 className="text-3xl font-display font-bold text-white mb-3">
+            Never Miss a Tax Update
+          </h2>
           <p className="text-gray-300 font-body mb-8">
-            Subscribe for fortnightly updates on GST circulars, income tax notifications and compliance reminders.
+            Subscribe for fortnightly updates on GST circulars, income tax
+            notifications and compliance reminders.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input type="email" placeholder="Your email address"
-              className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 font-body text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500" />
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 font-body text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            />
             <button className="btn-primary whitespace-nowrap">Subscribe →</button>
           </div>
         </div>
