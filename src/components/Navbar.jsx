@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -30,11 +30,28 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setMobileOpen(false);
     setActiveDropdown(null);
   }, [location]);
+
+  const handleGetQuote = () => {
+    setMobileOpen(false);
+    if (location.pathname === "/contact") {
+      // Already on contact page — just scroll to form
+      const el = document.getElementById("contact-form");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // Navigate to contact then scroll
+      navigate("/contact");
+      setTimeout(() => {
+        const el = document.getElementById("contact-form");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 400);
+    }
+  };
 
   return (
     <nav
@@ -49,8 +66,10 @@ export default function Navbar() {
             <span className="text-lg sm:text-xl font-bold font-display leading-tight text-white">
               JS Reddy & Associates
             </span>
-            <span className="text-xs font-body tracking-widest uppercase"
-              style={{ color: "#c9a84c" }}>
+            <span
+              className="text-xs font-body tracking-widest uppercase"
+              style={{ color: "#c9a84c" }}
+            >
               Chartered Accountants
             </span>
           </Link>
@@ -66,21 +85,27 @@ export default function Navbar() {
               >
                 <Link
                   to={link.path}
-                  className={`px-4 py-2 text-sm font-medium font-body transition-colors duration-200 animated-underline text-white hover:text-yellow-300 ${
-                    location.pathname === link.path ? "text-yellow-300" : ""
-                  }`}
+                  className="px-4 py-2 text-sm font-medium font-body transition-colors duration-200 text-white hover:text-yellow-300"
+                  style={{
+                    color: location.pathname === link.path ? "#fcd34d" : "white",
+                  }}
                 >
                   {link.label}
                   {link.dropdown && <span className="ml-1 text-xs">▾</span>}
                 </Link>
                 {link.dropdown && activeDropdown === link.label && (
-                  <div className="absolute top-full left-0 w-56 shadow-xl border-t-2 border-yellow-500 py-2 z-50"
-                    style={{ background: "#0a1628" }}>
+                  <div
+                    className="absolute top-full left-0 w-56 shadow-xl border-t-2 py-2 z-50"
+                    style={{ background: "#0a1628", borderColor: "#c9a84c" }}
+                  >
                     {link.dropdown.map((item) => (
                       <Link
                         key={item.label}
                         to={item.path}
-                        className="block px-5 py-2.5 text-sm text-gray-300 hover:text-yellow-300 hover:bg-white/5 font-body transition-colors"
+                        className="block px-5 py-2.5 text-sm font-body transition-colors"
+                        style={{ color: "#d1d5db" }}
+                        onMouseEnter={(e) => (e.target.style.color = "#fcd34d")}
+                        onMouseLeave={(e) => (e.target.style.color = "#d1d5db")}
                       >
                         {item.label}
                       </Link>
@@ -89,9 +114,14 @@ export default function Navbar() {
                 )}
               </div>
             ))}
-            <Link to="/contact" className="ml-4 btn-primary text-sm">
+
+            {/* Get a Quote button */}
+            <button
+              onClick={handleGetQuote}
+              className="ml-4 btn-primary text-sm"
+            >
               Get a Quote
-            </Link>
+            </button>
           </div>
 
           {/* Hamburger */}
@@ -101,29 +131,41 @@ export default function Navbar() {
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             <div className="w-6 flex flex-col gap-1.5">
-              <span className={`block h-0.5 bg-yellow-400 transition-all duration-300 ${
-                mobileOpen ? "rotate-45 translate-y-2" : ""}`} />
-              <span className={`block h-0.5 bg-yellow-400 transition-all duration-300 ${
-                mobileOpen ? "opacity-0" : ""}`} />
-              <span className={`block h-0.5 bg-yellow-400 transition-all duration-300 ${
-                mobileOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+              <span
+                className={`block h-0.5 bg-yellow-400 transition-all duration-300 ${
+                  mobileOpen ? "rotate-45 translate-y-2" : ""
+                }`}
+              />
+              <span
+                className={`block h-0.5 bg-yellow-400 transition-all duration-300 ${
+                  mobileOpen ? "opacity-0" : ""
+                }`}
+              />
+              <span
+                className={`block h-0.5 bg-yellow-400 transition-all duration-300 ${
+                  mobileOpen ? "-rotate-45 -translate-y-2" : ""
+                }`}
+              />
             </div>
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu — always dark */}
+      {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="lg:hidden mobile-menu-open border-t border-white/10"
-          style={{ background: "#0a1628" }}>
+        <div
+          className="lg:hidden mobile-menu-open border-t"
+          style={{ background: "#0a1628", borderColor: "rgba(255,255,255,0.1)" }}
+        >
           <div className="px-4 py-4 space-y-1">
             {navLinks.map((link) => (
               <div key={link.label}>
                 <Link
                   to={link.path}
-                  className={`block px-4 py-3 font-medium font-body rounded transition-colors text-white hover:text-yellow-300 hover:bg-white/5 ${
-                    location.pathname === link.path ? "text-yellow-300" : ""
-                  }`}
+                  className="block px-4 py-3 font-medium font-body rounded transition-colors text-white hover:text-yellow-300"
+                  style={{
+                    color: location.pathname === link.path ? "#fcd34d" : "white",
+                  }}
                 >
                   {link.label}
                 </Link>
@@ -133,7 +175,8 @@ export default function Navbar() {
                       <Link
                         key={item.label}
                         to={item.path}
-                        className="block px-4 py-2 text-sm text-gray-400 hover:text-yellow-300 font-body transition-colors"
+                        className="block px-4 py-2 text-sm font-body transition-colors"
+                        style={{ color: "#9ca3af" }}
                       >
                         — {item.label}
                       </Link>
@@ -142,10 +185,15 @@ export default function Navbar() {
                 )}
               </div>
             ))}
+
+            {/* Mobile Get a Quote */}
             <div className="pt-3 pb-2">
-              <Link to="/contact" className="btn-primary block text-center text-sm">
+              <button
+                onClick={handleGetQuote}
+                className="btn-primary block text-center text-sm w-full"
+              >
                 Get a Quote
-              </Link>
+              </button>
             </div>
           </div>
         </div>

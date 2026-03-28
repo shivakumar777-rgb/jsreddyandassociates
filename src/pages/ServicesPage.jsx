@@ -137,34 +137,30 @@ export default function ServicesPage() {
   const selected = allServices.find((s) => s.id === active);
 
   useEffect(() => {
-    const handleSelect = (e) => {
-      if (e.detail) {
-        setActive(e.detail);
-        setTimeout(() => {
-          const el = document.getElementById("service-content");
-          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
-      }
-    };
-    window.addEventListener("selectService", handleSelect);
-    return () => window.removeEventListener("selectService", handleSelect);
+    const saved = sessionStorage.getItem("selectedService");
+    if (saved && allServices.find((s) => s.id === saved)) {
+      setActive(saved);
+    }
+    sessionStorage.removeItem("selectedService");
   }, []);
 
   return (
-    <div className="pt-16">
+    <div>
 
-      {/* Hero */}
-      <section
-        className="py-14 sm:py-20 text-white"
-        style={{ background: "linear-gradient(135deg, #0a1628, #112240)" }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero + Tabs wrapped together — NO gap between them */}
+      <div style={{ background: "linear-gradient(135deg, #0a1628, #112240)" }}>
+
+        {/* Hero */}
+        <div
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          style={{ paddingTop: "90px", paddingBottom: "40px" }}
+        >
           <p className="text-yellow-400 font-body text-sm tracking-widest uppercase font-semibold mb-3">
             Our Services
           </p>
           <h1
-            className="font-display font-bold mb-4 leading-tight"
-            style={{ fontSize: "clamp(1.6rem, 4.5vw, 3rem)" }}
+            className="font-display font-bold mb-4 text-white leading-tight"
+            style={{ fontSize: "clamp(1.8rem, 4.5vw, 3rem)" }}
           >
             Comprehensive Financial
             <br className="hidden sm:block" />
@@ -175,77 +171,91 @@ export default function ServicesPage() {
             taxation — we offer a full suite of CA services under one roof.
           </p>
         </div>
-      </section>
 
-      {/* Mobile scrollable tabs — no sticky, no white gap */}
-      <div
-        className="lg:hidden py-3 border-b border-gray-200"
-        style={{ background: "#f9fafb" }}
-      >
+        {/* Mobile tabs — INSIDE the navy hero wrapper so NO white line */}
         <div
-          className="overflow-x-auto"
-          style={{ WebkitOverflowScrolling: "touch" }}
+          className="lg:hidden"
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.1)",
+            padding: "10px 0",
+          }}
         >
-          <div className="flex gap-2 px-4 pb-1" style={{ width: "max-content" }}>
-            {allServices.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => {
-                  setActive(s.id);
-                  setTimeout(() => {
-                    const el = document.getElementById("service-content");
-                    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }, 50);
-                }}
-                className="flex items-center gap-2 px-3 py-2 rounded-full text-xs font-body font-medium whitespace-nowrap transition-all border"
-                style={
-                  active === s.id
-                    ? {
-                        background: "linear-gradient(135deg, #c9a84c, #e8c97a)",
-                        borderColor: "#c9a84c",
-                        color: "#0a1628",
-                      }
-                    : {
-                        background: "white",
-                        borderColor: "#e5e7eb",
-                        color: "#6b7280",
-                      }
-                }
-              >
-                <span style={{ fontSize: "14px" }}>{s.icon}</span>
-                <span>{s.title}</span>
-              </button>
-            ))}
+          <div
+            className="overflow-x-auto"
+            style={{ WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
+          >
+            <div className="flex gap-2 px-4" style={{ width: "max-content" }}>
+              {allServices.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => {
+                    setActive(s.id);
+                    setTimeout(() => {
+                      const el = document.getElementById("service-content");
+                      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 100);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-body font-medium whitespace-nowrap transition-all"
+                  style={
+                    active === s.id
+                      ? {
+                          background: "linear-gradient(135deg, #c9a84c, #e8c97a)",
+                          color: "#0a1628",
+                          fontWeight: "600",
+                          border: "none",
+                        }
+                      : {
+                          background: "rgba(255,255,255,0.1)",
+                          color: "rgba(255,255,255,0.8)",
+                          border: "1px solid rgba(255,255,255,0.2)",
+                        }
+                  }
+                >
+                  <span>{s.icon}</span>
+                  <span>{s.title}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
+
       </div>
+      {/* END navy wrapper — no white gap possible */}
 
       {/* Main layout */}
-      <section className="py-8 sm:py-14 bg-gray-50" id="service-content">
+      <section
+        className="py-8 sm:py-14 bg-gray-50"
+        id="service-content"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-8">
 
-            {/* Sidebar desktop */}
+            {/* Desktop sidebar */}
             <div className="hidden lg:block lg:col-span-1">
-              <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm sticky top-20">
+              <div
+                className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm"
+                style={{ position: "sticky", top: "80px" }}
+              >
                 {allServices.map((s) => (
                   <button
                     key={s.id}
                     onClick={() => setActive(s.id)}
-                    className={`w-full flex items-center gap-3 px-5 py-4 text-left border-b border-gray-50 transition-all ${
+                    className="w-full flex items-center gap-3 px-5 py-4 text-left border-b border-gray-50 transition-all hover:bg-gray-50"
+                    style={
                       active === s.id
-                        ? "bg-yellow-50 border-l-4 border-l-yellow-500"
-                        : "hover:bg-gray-50"
-                    }`}
+                        ? { background: "#fefce8", borderLeft: "4px solid #c9a84c" }
+                        : {}
+                    }
                   >
                     <span className="text-xl flex-shrink-0">{s.icon}</span>
-                    <span className={`font-body font-medium text-sm ${
-                      active === s.id ? "text-yellow-800" : "text-gray-700"
-                    }`}>
+                    <span
+                      className="font-body font-medium text-sm"
+                      style={{ color: active === s.id ? "#92400e" : "#374151" }}
+                    >
                       {s.title}
                     </span>
                     {active === s.id && (
-                      <span className="ml-auto text-yellow-500 text-xs">●</span>
+                      <span className="ml-auto text-xs" style={{ color: "#c9a84c" }}>●</span>
                     )}
                   </button>
                 ))}
@@ -257,7 +267,10 @@ export default function ServicesPage() {
               {selected && (
                 <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 sm:p-8">
                   <div className="flex items-start gap-4 mb-5">
-                    <div className="w-12 h-12 flex-shrink-0 rounded-xl bg-yellow-50 border border-yellow-200 flex items-center justify-center text-xl">
+                    <div
+                      className="w-12 h-12 flex-shrink-0 rounded-xl flex items-center justify-center text-2xl"
+                      style={{ background: "#fefce8", border: "1px solid #fde68a" }}
+                    >
                       {selected.icon}
                     </div>
                     <div>
@@ -275,9 +288,10 @@ export default function ServicesPage() {
                   <h3 className="font-display font-semibold text-gray-900 text-base sm:text-lg mb-4">
                     What's Included:
                   </h3>
+
                   <ul className="space-y-3">
-                    {selected.items.map((item) => (
-                      <li key={item} className="flex items-start gap-3">
+                    {selected.items.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
                         <span
                           className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-white text-xs"
                           style={{ background: "linear-gradient(135deg, #c9a84c, #e8c97a)" }}
@@ -322,9 +336,14 @@ export default function ServicesPage() {
               { icon: "💰", title: "Cost Effective", desc: "Premium services at fair pricing" },
               { icon: "🔐", title: "Data Security", desc: "Your information is always safe" },
             ].map((f) => (
-              <div key={f.title} className="p-4 rounded-xl bg-gray-50 border border-gray-100 card-lift text-center">
+              <div
+                key={f.title}
+                className="p-4 rounded-xl bg-gray-50 border border-gray-100 card-lift text-center"
+              >
                 <div className="text-3xl mb-2">{f.icon}</div>
-                <h3 className="font-display font-semibold text-gray-900 text-sm mb-1">{f.title}</h3>
+                <h3 className="font-display font-semibold text-gray-900 text-sm mb-1">
+                  {f.title}
+                </h3>
                 <p className="text-gray-500 text-xs font-body">{f.desc}</p>
               </div>
             ))}
