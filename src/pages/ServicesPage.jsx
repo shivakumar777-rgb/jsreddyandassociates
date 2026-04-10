@@ -7,7 +7,7 @@ const allServices = [
     shortDesc: "Comprehensive income tax planning and compliance for corporates and individuals.",
     items: [
       "Income Tax Return filing for individuals, firms, LLPs and companies",
-      "TDS compliance — deduction, deposit and quarterly returns",
+      "TDS compliance - deduction, deposit and quarterly returns",
       "Advance tax computation and planning",
       "Tax assessment representation before Assessing Officer",
       "CIT(A), DRP and ITAT appeals and litigation",
@@ -21,7 +21,7 @@ const allServices = [
     ],
   },
   {
-    id: "gst", title: "Indirect Tax – GST", icon: "🧾",
+    id: "gst", title: "Indirect Tax - GST", icon: "🧾",
     shortDesc: "End-to-end GST compliance, refunds, audits and litigation support.",
     items: [
       "GST registration for all types of entities",
@@ -37,7 +37,7 @@ const allServices = [
     ],
   },
   {
-    id: "audit", title: "Audit & Assurance", icon: "✅",
+    id: "audit", title: "Audit and Assurance", icon: "✅",
     shortDesc: "Independent, objective audit services trusted by corporates, banks and PSUs.",
     items: [
       "Statutory audit of companies under Companies Act 2013",
@@ -56,9 +56,9 @@ const allServices = [
     id: "corporate", title: "Corporate Laws", icon: "🏢",
     shortDesc: "Company formation, MCA compliance, and corporate governance advisory.",
     items: [
-      "Company incorporation — Private Limited, Public Limited, OPC",
+      "Company incorporation - Private Limited, Public Limited, OPC",
       "LLP formation and conversions",
-      "ROC annual filings — AOC-4, MGT-7, ADT-1",
+      "ROC annual filings - AOC-4, MGT-7, ADT-1",
       "Board secretarial services and minutes preparation",
       "Director KYC, DIN and DSC services",
       "Charge creation and satisfaction with MCA",
@@ -69,11 +69,11 @@ const allServices = [
     ],
   },
   {
-    id: "accounting", title: "Accounting & BPO", icon: "📊",
+    id: "accounting", title: "Accounting and BPO", icon: "📊",
     shortDesc: "Outsourced bookkeeping, payroll and financial reporting services.",
     items: [
       "Day-to-day bookkeeping and ledger maintenance",
-      "Monthly financial statements — P&L, Balance Sheet",
+      "Monthly financial statements - P and L, Balance Sheet",
       "Accounts payable and receivable management",
       "Payroll processing including PF, ESI, PT deductions",
       "Management Information System (MIS) reports",
@@ -92,7 +92,7 @@ const allServices = [
       "Project financing and term loan documentation",
       "Investment structuring for optimal tax efficiency",
       "Organizational restructuring and due diligence",
-      "Startup advisory — funding, valuation, compliance",
+      "Startup advisory - funding, valuation, compliance",
       "Cash flow planning and working capital management",
       "Risk assessment and internal control review",
       "Cost optimization studies",
@@ -101,12 +101,12 @@ const allServices = [
     ],
   },
   {
-    id: "fema", title: "FEMA & International Tax", icon: "🌏",
+    id: "fema", title: "FEMA and International Tax", icon: "🌏",
     shortDesc: "Foreign exchange, cross-border transactions and international taxation.",
     items: [
       "FEMA compliance advisory for inbound and outbound investments",
       "RBI approvals for ECB, ODI, FDI and other transactions",
-      "NRI taxation — residential status, DTAA benefits",
+      "NRI taxation - residential status, DTAA benefits",
       "Transfer pricing documentation and APA",
       "DTAA analysis and withholding tax advisory",
       "Foreign remittance certifications (Form 15CA/15CB)",
@@ -116,7 +116,7 @@ const allServices = [
     ],
   },
   {
-    id: "ngo", title: "NGOs & Trusts", icon: "❤️",
+    id: "ngo", title: "NGOs and Trusts", icon: "❤️",
     shortDesc: "Tax and compliance support for charitable organizations and trusts.",
     items: [
       "Trust and society formation and registration",
@@ -137,25 +137,38 @@ export default function ServicesPage() {
   const selected = allServices.find((s) => s.id === active);
 
   useEffect(() => {
+    // Read from sessionStorage on first load
     const saved = sessionStorage.getItem("selectedService");
     if (saved && allServices.find((s) => s.id === saved)) {
       setActive(saved);
     }
     sessionStorage.removeItem("selectedService");
+
+    // Listen for changeService event from Navbar
+    // This fires when user clicks service while already on /services page
+    const handleChange = (e) => {
+      if (e.detail && allServices.find((s) => s.id === e.detail)) {
+        setActive(e.detail);
+        sessionStorage.removeItem("selectedService");
+      }
+    };
+
+    window.addEventListener("changeService", handleChange);
+    return () => window.removeEventListener("changeService", handleChange);
   }, []);
 
   return (
     <div>
 
-      {/* Hero + Tabs wrapped together — NO gap between them */}
+      {/* Hero + mobile tabs — all inside one navy wrapper, no white gap */}
       <div style={{ background: "linear-gradient(135deg, #0a1628, #112240)" }}>
 
-        {/* Hero */}
         <div
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
           style={{ paddingTop: "90px", paddingBottom: "40px" }}
         >
-          <p className="text-yellow-400 font-body text-sm tracking-widest uppercase font-semibold mb-3">
+          <p className="font-body text-sm tracking-widest uppercase font-semibold mb-3"
+            style={{ color: "#fbbf24" }}>
             Our Services
           </p>
           <h1
@@ -164,21 +177,19 @@ export default function ServicesPage() {
           >
             Comprehensive Financial
             <br className="hidden sm:block" />
-            <span className="gold-text"> & Legal Services</span>
+            <span className="gold-text"> and Legal Services</span>
           </h1>
-          <p className="text-gray-300 font-body text-sm sm:text-base max-w-2xl leading-relaxed">
+          <p className="font-body text-sm sm:text-base max-w-2xl leading-relaxed"
+            style={{ color: "#d1d5db" }}>
             From tax planning and audits to corporate laws and international
-            taxation — we offer a full suite of CA services under one roof.
+            taxation - we offer a full suite of CA services under one roof.
           </p>
         </div>
 
-        {/* Mobile tabs — INSIDE the navy hero wrapper so NO white line */}
+        {/* Mobile scrollable tabs inside hero - NO white line */}
         <div
           className="lg:hidden"
-          style={{
-            borderTop: "1px solid rgba(255,255,255,0.1)",
-            padding: "10px 0",
-          }}
+          style={{ borderTop: "1px solid rgba(255,255,255,0.1)", padding: "10px 0" }}
         >
           <div
             className="overflow-x-auto"
@@ -220,13 +231,9 @@ export default function ServicesPage() {
         </div>
 
       </div>
-      {/* END navy wrapper — no white gap possible */}
 
       {/* Main layout */}
-      <section
-        className="py-8 sm:py-14 bg-gray-50"
-        id="service-content"
-      >
+      <section className="py-8 sm:py-14 bg-gray-50" id="service-content">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-8">
 
@@ -262,7 +269,7 @@ export default function ServicesPage() {
               </div>
             </div>
 
-            {/* Content */}
+            {/* Content panel */}
             <div className="lg:col-span-2">
               {selected && (
                 <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 sm:p-8">
@@ -286,7 +293,7 @@ export default function ServicesPage() {
                   <div className="section-divider mb-5" />
 
                   <h3 className="font-display font-semibold text-gray-900 text-base sm:text-lg mb-4">
-                    What's Included:
+                    What is Included:
                   </h3>
 
                   <ul className="space-y-3">
@@ -307,7 +314,7 @@ export default function ServicesPage() {
 
                   <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col sm:flex-row gap-3">
                     <Link to="/contact" className="btn-primary text-center text-sm">
-                      Enquire About This Service →
+                      Enquire About This Service
                     </Link>
                     <Link to="/contact" className="btn-outline text-center text-sm">
                       Request a Quote
@@ -336,14 +343,9 @@ export default function ServicesPage() {
               { icon: "💰", title: "Cost Effective", desc: "Premium services at fair pricing" },
               { icon: "🔐", title: "Data Security", desc: "Your information is always safe" },
             ].map((f) => (
-              <div
-                key={f.title}
-                className="p-4 rounded-xl bg-gray-50 border border-gray-100 card-lift text-center"
-              >
+              <div key={f.title} className="p-4 rounded-xl bg-gray-50 border border-gray-100 card-lift text-center">
                 <div className="text-3xl mb-2">{f.icon}</div>
-                <h3 className="font-display font-semibold text-gray-900 text-sm mb-1">
-                  {f.title}
-                </h3>
+                <h3 className="font-display font-semibold text-gray-900 text-sm mb-1">{f.title}</h3>
                 <p className="text-gray-500 text-xs font-body">{f.desc}</p>
               </div>
             ))}
@@ -352,19 +354,16 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA */}
-      <section
-        className="py-12"
-        style={{ background: "linear-gradient(135deg, #0a1628, #1a3a5c)" }}
-      >
+      <section className="py-12" style={{ background: "linear-gradient(135deg, #0a1628, #1a3a5c)" }}>
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mb-4">
             Need a Specific Service?
           </h2>
-          <p className="text-gray-300 font-body mb-6 text-sm sm:text-base">
-            Contact our team and we'll guide you to the right solution.
+          <p className="font-body mb-6 text-sm sm:text-base" style={{ color: "#d1d5db" }}>
+            Contact our team and we will guide you to the right solution.
           </p>
           <Link to="/contact" className="btn-primary inline-block">
-            Talk to Our Experts →
+            Talk to Our Experts
           </Link>
         </div>
       </section>
